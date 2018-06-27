@@ -169,6 +169,7 @@ extension SocketEngineSpec {
 
     func createBinaryDataForSend(using data: Data) -> Either<Data, String> {
         if polling {
+            var e: Either<Int, String>? = .left(1)
             return .right("b4" + data.base64EncodedString(options: Data.Base64EncodingOptions(rawValue: 0)))
         } else {
             return .left(Data(bytes: [0x4]) + data)

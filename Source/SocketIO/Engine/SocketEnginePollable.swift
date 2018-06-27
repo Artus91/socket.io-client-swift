@@ -119,7 +119,8 @@ extension SocketEnginePollable {
 
     func doLongPoll(for req: URLRequest) {
         waitingForPoll = true
-
+        
+        print("LOGGING doLongPoll \(req.url?.absoluteString ?? "nil" ), body \(req.httpBody)")
         doRequest(for: req) {[weak self] data, res, err in
             guard let this = self, this.polling else { return }
 
@@ -134,13 +135,14 @@ extension SocketEnginePollable {
             }
 
             DefaultSocketLogger.Logger.log("Got polling response", type: "SocketEnginePolling")
-
+            
             if let str = String(data: data!, encoding: .utf8) {
                 this.parsePollingMessage(str)
             }
 
             this.waitingForPoll = false
-
+            let str = "Polling \(this.polling), fastUpgrade \(this.fastUpgrade)"
+            print("LOGGING doLongPoll callback \(req.url?.absoluteString ?? "nil" ), resp \(res.debugDescription),  \(str)")
             if this.fastUpgrade {
                 this.doFastUpgrade()
             } else if !this.closed && this.polling {
@@ -150,6 +152,7 @@ extension SocketEnginePollable {
     }
 
     private func flushWaitingForPost() {
+        print("FlushWaitingForPost polling \(polling), fastUpgrade \(fastUpgrade), postWaitCount \(postWait.count), connected \(connected)")
         guard postWait.count != 0 && connected else { return }
         guard polling else {
             flushWaitingForPostToWebSocket()
@@ -161,7 +164,8 @@ extension SocketEnginePollable {
 
         waitingForPost = true
 
-        DefaultSocketLogger.Logger.log("POSTing", type: "SocketEnginePolling")
+        let d = String.init(data: req.httpBody!, encoding: .utf8)
+        DefaultSocketLogger.Logger.log("POSTing req \(d)", type: "SocketEnginePolling")
 
         doRequest(for: req) {[weak self] data, res, err in
             guard let this = self else { return }
@@ -177,7 +181,11 @@ extension SocketEnginePollable {
             }
 
             this.waitingForPost = false
-
+            var d: String? = nil
+            if data != nil {
+                d = String.init(data: data!, encoding: .utf8)
+            }
+            print("FlushWaitingForPost response \(this.fastUpgrade), data \(d ?? "nil"), res \(res)" )
             if !this.fastUpgrade {
                 this.flushWaitingForPost()
                 this.doPoll()

@@ -1,23 +1,23 @@
 Pod::Spec.new do |s|
   s.name         = "Socket.IO-Client-Swift"
   s.module_name  = "SocketIO"
-  s.version      = "13.2.1"
+  s.version      = "13.2.1-artus-001"
   s.summary      = "Socket.IO-client for iOS and OS X"
   s.description  = <<-DESC
                    Socket.IO-client for iOS and OS X.
                    Supports ws/wss/polling connections and binary.
                    For socket.io 2.0+ and Swift.
                    DESC
-  s.homepage     = "https://github.com/socketio/socket.io-client-swift"
+  s.homepage     = "https://github.com/Artus91/socket.io-client-swift.git"
   s.license      = { :type => 'MIT' }
-  s.author       = { "Erik" => "nuclear.ace@gmail.com" }
+  s.author       = { "Artus" => "artus999120@gmail.com" }
   s.ios.deployment_target = '8.0'
   s.osx.deployment_target = '10.10'
   s.tvos.deployment_target = '9.0'
   s.watchos.deployment_target = '2.0'
   s.requires_arc = true
   s.source = {
-    :git => "https://github.com/socketio/socket.io-client-swift.git",
+    :git => "https://github.com/Artus91/socket.io-client-swift.git",
     :tag => 'v13.2.1',
     :submodules => true
   }

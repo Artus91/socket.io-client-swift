@@ -188,7 +188,7 @@ open class SocketEngine : NSObject, URLSessionDelegate, SocketEnginePollable, So
              */
             didError(reason: error)
         } catch {
-            client?.engineDidError(reason: "Got unknown error from server \(msg)")
+            didError(reason: "Got unknown error from server \(msg)")
         }
     }
 
