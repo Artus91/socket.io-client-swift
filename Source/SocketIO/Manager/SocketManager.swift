@@ -304,11 +304,14 @@ open class SocketManager : NSObject, SocketManagerSpec, SocketParsable, SocketDa
 
     private func _engineDidClose(reason: String) {
         waitingPackets.removeAll()
+        if  status == .connected {
+            didDisconnect(reason: "Server is inaccessible")
+        }
 
         if status != .disconnected {
             status = .notConnected
         }
-
+        
         if status == .disconnected || !reconnects {
             didDisconnect(reason: reason)
         } else if !reconnecting {
